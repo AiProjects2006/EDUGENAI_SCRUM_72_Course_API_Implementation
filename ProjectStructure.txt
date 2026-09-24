@@ -1,0 +1,111 @@
+Folder PATH listing
+Volume serial number is 0000003A FC93:8761
+C:.
+¦   .gitattributes
+¦   .gitignore
+¦   HELP.md
+¦   mvnw
+¦   mvnw.cmd
+¦   pom.xml
+¦   ProjectStructure.txt
+¦   
++---.idea
+¦       compiler.xml
+¦       encodings.xml
+¦       jarRepositories.xml
+¦       misc.xml
+¦       workspace.xml
+¦       
++---.mvn
+¦   +---wrapper
+¦           maven-wrapper.properties
+¦           
++---src
+¦   +---main
+¦   ¦   +---java
+¦   ¦   ¦   +---com
+¦   ¦   ¦       +---ailearning
+¦   ¦   ¦           +---userservice
+¦   ¦   ¦               ¦   UserServiceApplication.java
+¦   ¦   ¦               ¦   
+¦   ¦   ¦               +---config
+¦   ¦   ¦               ¦       SwaggerConfig.java
+¦   ¦   ¦               ¦       
+¦   ¦   ¦               +---controller
+¦   ¦   ¦               ¦       AuthController.java
+¦   ¦   ¦               ¦       ContentCreatorController.java
+¦   ¦   ¦               ¦       StudentController.java
+¦   ¦   ¦               ¦       UserController.java
+¦   ¦   ¦               ¦       
+¦   ¦   ¦               +---dto
+¦   ¦   ¦               ¦   +---request
+¦   ¦   ¦               ¦   ¦       ForgotPasswordRequest.java
+¦   ¦   ¦               ¦   ¦       LoginRequest.java
+¦   ¦   ¦               ¦   ¦       RegisterRequest.java
+¦   ¦   ¦               ¦   ¦       UpdateUserRequest.java
+¦   ¦   ¦               ¦   ¦       
+¦   ¦   ¦               ¦   +---response
+¦   ¦   ¦               ¦           ApiResponse.java
+¦   ¦   ¦               ¦           LoginResponse.java
+¦   ¦   ¦               ¦           RegisterResponse.java
+¦   ¦   ¦               ¦           UserResponse.java
+¦   ¦   ¦               ¦           
+¦   ¦   ¦               +---entity
+¦   ¦   ¦               ¦       ContentCreatorProfile.java
+¦   ¦   ¦               ¦       StudentProfile.java
+¦   ¦   ¦               ¦       User.java
+¦   ¦   ¦               ¦       UserSession.java
+¦   ¦   ¦               ¦       
+¦   ¦   ¦               +---enums
+¦   ¦   ¦               ¦       Role.java
+¦   ¦   ¦               ¦       UserStatus.java
+¦   ¦   ¦               ¦       
+¦   ¦   ¦               +---exception
+¦   ¦   ¦               ¦       GlobalExceptionHandler.java
+¦   ¦   ¦               ¦       UserNameAlreadyExistsException.java
+¦   ¦   ¦               ¦       UserNotFoundException.java
+¦   ¦   ¦               ¦       
+¦   ¦   ¦               +---repository
+¦   ¦   ¦               ¦       ContentCreatorRepository.java
+¦   ¦   ¦               ¦       StudentRepository.java
+¦   ¦   ¦               ¦       UserRepository.java
+¦   ¦   ¦               ¦       UserSessionRepository.java
+¦   ¦   ¦               ¦       
+¦   ¦   ¦               +---service
+¦   ¦   ¦               ¦   ¦   AuthService.java
+¦   ¦   ¦               ¦   ¦   ContentCreatorService.java
+¦   ¦   ¦               ¦   ¦   StudentService.java
+¦   ¦   ¦               ¦   ¦   UserService.java
+¦   ¦   ¦               ¦   ¦   
+¦   ¦   ¦               ¦   +---impl
+¦   ¦   ¦               ¦           AuthServiceImpl.java
+¦   ¦   ¦               ¦           ContentCreatorServiceImpl.java
+¦   ¦   ¦               ¦           StudentServiceImpl.java
+¦   ¦   ¦               ¦           UserServiceImpl.java
+¦   ¦   ¦               ¦           
+¦   ¦   ¦               +---util
+¦   ¦   ¦                       MapperUtil.java
+¦   ¦   ¦                       
+¦   ¦   +---resources
+¦   ¦       ¦   application.properties
+¦   ¦       ¦   
+¦   ¦       +---static
+¦   ¦       +---templates
+¦   +---test
+¦       +---java
+¦           +---com
+¦               +---ailearning
+¦                   +---userservice
+¦                           UserServiceApplicationTests.java
+¦                           
++---target
+    +---classes
+    ¦   ¦   application.properties
+    ¦   ¦   
+    ¦   +---com
+    ¦       +---ailearning
+    ¦           +---userservice
+    ¦                   UserServiceApplication.class
+    ¦                   
+    +---generated-sources
+        +---annotations
