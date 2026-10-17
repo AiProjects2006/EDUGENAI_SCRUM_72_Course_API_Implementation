@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class UpdateCourseRequest {
 
+    private Long subjectId;
+
     @NotBlank
     private String title;
 

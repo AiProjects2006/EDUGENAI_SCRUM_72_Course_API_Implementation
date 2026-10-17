@@ -5,6 +5,8 @@ import com.ailearning.courseservice.enums.CourseStatus;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class CourseResponse {
@@ -24,4 +26,6 @@ public class CourseResponse {
     private CourseLevel level;
 
     private CourseStatus status;
+
+    private LocalDateTime createdAt;
 }

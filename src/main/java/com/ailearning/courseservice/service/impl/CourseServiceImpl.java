@@ -97,6 +97,14 @@ public class CourseServiceImpl implements CourseService {
                         new ResourceNotFoundException(
                                 "Course not found"));
 
+        if (request.getSubjectId() != null) {
+            Subject subject = subjectRepository.findById(request.getSubjectId())
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Subject not found"));
+            course.setSubject(subject);
+        }
+
         course.setTitle(request.getTitle());
         course.setDescription(request.getDescription());
         course.setThumbnailUrl(request.getThumbnailUrl());
@@ -130,6 +138,7 @@ public class CourseServiceImpl implements CourseService {
                 .thumbnailUrl(course.getThumbnailUrl())
                 .level(course.getLevel())
                 .status(course.getStatus())
+                .createdAt(course.getCreatedAt())
                 .build();
     }
 
