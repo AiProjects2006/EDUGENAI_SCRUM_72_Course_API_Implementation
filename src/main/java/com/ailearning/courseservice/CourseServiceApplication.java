@@ -21,20 +21,23 @@ public class CourseServiceApplication {
 				if (subjectRepository.count() == 0) {
 					subjectRepository.save(Subject.builder()
 							.name("Mathematics")
-							.description("Mathematics, arithmetic, algebra and problem solving")
+							.description("Mathematics, arithmetic, and problem solving for Grades 3-5")
 							.build());
 					subjectRepository.save(Subject.builder()
-							.name("Science")
-							.description("Natural science, biology, physics and environment")
+							.name("Environmental Studies")
+							.description("Environmental studies, nature, surroundings and community")
 							.build());
 					subjectRepository.save(Subject.builder()
 							.name("ICT")
-							.description("Information and Communication Technology and digital skills")
+							.description("Information and Communication Technology, computer basics and digital literacy")
 							.build());
-					subjectRepository.save(Subject.builder()
-							.name("English")
-							.description("English language, grammar and vocabulary")
-							.build());
+				} else {
+					if (subjectRepository.findByName("Environmental Studies").isEmpty()) {
+						subjectRepository.save(Subject.builder()
+								.name("Environmental Studies")
+								.description("Environmental studies, nature, surroundings and community")
+								.build());
+					}
 				}
 			} catch (Exception ignored) {
 			}

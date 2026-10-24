@@ -24,31 +24,28 @@ public class SecurityConfig {
             HttpSecurity http) throws Exception {
 
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(Customizer.withDefaults())
-            .authorizeHttpRequests(auth -> {
-                auth.requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/actuator/**",
-                    "/error"
-                ).permitAll();
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/actuator/**",
+                            "/error").permitAll();
 
-                auth.requestMatchers(
-                    HttpMethod.OPTIONS,
-                    "/**"
-                ).permitAll();
+                    auth.requestMatchers(
+                            HttpMethod.OPTIONS,
+                            "/**").permitAll();
 
-                if (openCourseApi) {
-                    auth.requestMatchers("/api/v1/**").permitAll();
-                }
+                    if (openCourseApi) {
+                        auth.requestMatchers("/api/v1/**").permitAll();
+                    }
 
-                auth.anyRequest().authenticated();
-            });
+                    auth.anyRequest().authenticated();
+                });
 
         http.oauth2ResourceServer(oauth2 -> oauth2.jwt(
-            Customizer.withDefaults()
-        ));
+                Customizer.withDefaults()));
 
         return http.build();
     }
@@ -58,19 +55,16 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(
-            List.of("http://localhost:5173", "http://localhost:5174", "http://localhost:5175")
-        );
+                List.of("http://localhost:5173", "http://localhost:5174", "http://localhost:5175"));
 
         config.setAllowedMethods(
-            List.of("GET", "POST", "PUT", "DELETE",
-                    "PATCH", "OPTIONS")
-        );
+                List.of("GET", "POST", "PUT", "DELETE",
+                        "PATCH", "OPTIONS"));
 
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(false);
 
-        UrlBasedCorsConfigurationSource source =
-            new UrlBasedCorsConfigurationSource();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", config);
 
