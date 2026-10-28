@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Course {
 
@@ -54,7 +53,35 @@ public class Course {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+    @Builder.Default
     private List<Module> modules = new ArrayList<>();
+
+    public Course(
+            Long courseId,
+            Subject subject,
+            Long creatorId,
+            String title,
+            String description,
+            String thumbnailUrl,
+            CourseLevel level,
+            CourseStatus status,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            List<Module> modules
+    ) {
+        super();
+        this.courseId = courseId;
+        this.subject = subject;
+        this.creatorId = creatorId;
+        this.title = title;
+        this.description = description;
+        this.thumbnailUrl = thumbnailUrl;
+        this.level = level;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.modules = modules == null ? new ArrayList<>() : modules;
+    }
 
     @PrePersist
     public void onCreate() {

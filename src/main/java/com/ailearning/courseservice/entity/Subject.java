@@ -27,6 +27,7 @@ public class Subject {
     @OneToMany(mappedBy = "subject",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+    @Builder.Default
     private List<Course> courses = new ArrayList<>();
 
     @PrePersist
