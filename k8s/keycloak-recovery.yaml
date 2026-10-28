@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: keycloak-recovery
+spec:
+  restartPolicy: Never
+  containers:
+    - name: keycloak
+      image: quay.io/keycloak/keycloak:26.3.3
+      command:
+        - /opt/keycloak/bin/kc.sh
+      args:
+        - bootstrap-admin
+        - user
+        - --username
+        - recovery-admin
+        - --password:env
+        - RECOVERY_PASSWORD
+        - --no-prompt
+      env:
+        - name: KC_DB
+          value: "mysql"
+
+        - name: KC_DB_URL
+          value: "jdbc:mysql://edugenai-course-db.c87gcu82epqj.us-east-1.rds.amazonaws.com:3306/keycloak_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+
+        - name: KC_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-db-secret
+              key: KC_DB_USERNAME
+
+        - name: KC_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-db-secret
+              key: KC_DB_PASSWORD
+
+        - name: RECOVERY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-recovery-secret
+              key: RECOVERY_PASSWORD

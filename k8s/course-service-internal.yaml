@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: course-service-internal
+  namespace: default
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "external"
+    service.beta.kubernetes.io/aws-load-balancer-scheme: "internal"
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: "ip"
+    service.beta.kubernetes.io/aws-load-balancer-subnets: "subnet-0956aeb026e11a225,subnet-037603b14a5fb2bb4,subnet-0433deaf7e4d84d35"
+spec:
+  type: LoadBalancer
+  selector:
+    app: course-service
+  ports:
+    - name: http
+      port: 8082
+      targetPort: 8082
+      protocol: TCP

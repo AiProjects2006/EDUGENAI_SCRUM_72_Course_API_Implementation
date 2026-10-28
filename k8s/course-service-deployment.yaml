@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: course-service
+  labels:
+    app: course-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: course-service
+  template:
+    metadata:
+      labels:
+        app: course-service
+    spec:
+      containers:
+        - name: course-service
+          image: 163831439393.dkr.ecr.us-east-1.amazonaws.com/edugenai/course-service:2.2
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8082
+
+          env:
+            - name: DATABASE_URL
+              value: "jdbc:mysql://edugenai-course-db.c87gcu82epqj.us-east-1.rds.amazonaws.com:3306/course_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: course-db-secret
+                  key: DATABASE_USERNAME
+
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: course-db-secret
+                  key: DATABASE_PASSWORD
+
+            - name: KEYCLOAK_ISSUER_URI
+              value: "http://keycloak/realms/ai-learning-platform"

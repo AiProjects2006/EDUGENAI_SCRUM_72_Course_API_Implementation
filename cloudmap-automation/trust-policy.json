@@ -1,0 +1,18 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::163831439393:oidc-provider/oidc.eks.us-east-1.amazonaws.com/id/575CD4F9670508BB1FDF20A6FF51979A"
+      },
+      "Action": "sts:AssumeRoleWithWebIdentity",
+      "Condition": {
+        "StringEquals": {
+          "oidc.eks.us-east-1.amazonaws.com/id/575CD4F9670508BB1FDF20A6FF51979A:aud": "sts.amazonaws.com",
+          "oidc.eks.us-east-1.amazonaws.com/id/575CD4F9670508BB1FDF20A6FF51979A:sub": "system:serviceaccount:default:cloudmap-updater"
+        }
+      }
+    }
+  ]
+}

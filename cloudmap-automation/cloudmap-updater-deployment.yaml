@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudmap-updater
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudmap-updater
+  template:
+    metadata:
+      labels:
+        app: cloudmap-updater
+    spec:
+      serviceAccountName: cloudmap-updater
+      containers:
+        - name: cloudmap-updater
+          image: 163831439393.dkr.ecr.us-east-1.amazonaws.com/edugenai/cloudmap-updater:1.1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AWS_REGION
+              value: "us-east-1"
+            - name: CLOUD_MAP_SERVICE_ID
+              value: "srv-jmlnaub3w4gugan2"
+            - name: K8S_NAMESPACE
+              value: "default"
+            - name: POD_LABEL_SELECTOR
+              value: "app=course-service"
+            - name: COURSE_SERVICE_PORT
+              value: "8082"
+            - name: SYNC_INTERVAL_SECONDS
+              value: "30"
+            - name: OPERATION_TIMEOUT_SECONDS
+              value: "120"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "96Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"

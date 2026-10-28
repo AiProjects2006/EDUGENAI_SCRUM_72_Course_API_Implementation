@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: keycloak
+
+  template:
+    metadata:
+      labels:
+        app: keycloak
+
+    spec:
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:26.3.3
+
+          args:
+            - start
+
+          ports:
+            - containerPort: 8080
+            - containerPort: 9000
+
+          env:
+            - name: KC_DB
+              value: "mysql"
+
+            - name: KC_DB_URL
+              value: "jdbc:mysql://edugenai-course-db.c87gcu82epqj.us-east-1.rds.amazonaws.com:3306/keycloak_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+
+            - name: KC_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: KC_DB_USERNAME
+
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: KC_DB_PASSWORD
+
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: KC_BOOTSTRAP_ADMIN_USERNAME
+
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-db-secret
+                  key: KC_BOOTSTRAP_ADMIN_PASSWORD
+
+            - name: KC_HTTP_ENABLED
+              value: "true"
+
+            - name: KC_HOSTNAME_STRICT
+              value: "false"
+
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+
+            - name: KC_HTTP_MANAGEMENT_SCHEME
+              value: "http"
+
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 9000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+
+            limits:
+              cpu: 500m
+              memory: 1Gi

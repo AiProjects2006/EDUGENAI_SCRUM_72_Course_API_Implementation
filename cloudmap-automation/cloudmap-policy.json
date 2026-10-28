@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ManageCourseServiceCloudMapInstances",
+      "Effect": "Allow",
+      "Action": [
+        "servicediscovery:RegisterInstance",
+        "servicediscovery:DeregisterInstance",
+        "servicediscovery:ListInstances"
+      ],
+      "Resource": "arn:aws:servicediscovery:us-east-1:163831439393:service/srv-jmlnaub3w4gugan2"
+    },
+    {
+      "Sid": "CheckCloudMapOperations",
+      "Effect": "Allow",
+      "Action": "servicediscovery:GetOperation",
+      "Resource": "*"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "Issuer": "http://k8s-default-keycloak-020b4ffe14-ebc16d87fabeefef.elb.us-east-1.amazonaws.com/realms/ai-learning-platform",
+  "Audience": [
+    "course-api"
+  ]
+}
