@@ -13,7 +13,6 @@ import java.util.List;
 @Table(name = "courses")
 @Getter
 @Setter
-@NoArgsConstructor
 @Builder
 public class Course {
 
@@ -55,6 +54,10 @@ public class Course {
     )
     @Builder.Default
     private List<Module> modules = new ArrayList<>();
+
+    public Course() {
+        super();
+    }
 
     public Course(
             Long courseId,
