@@ -13,6 +13,7 @@ Feature: Course API CRUD and retrieval
     When method post
     Then status 201
     And match response.success == true
+    And match response.message == 'Subject created successfully.'
     And match response.data contains { subjectId: '#number', name: '#(subjectName)' }
     * def subjectId = response.data.subjectId
 
@@ -34,6 +35,7 @@ Feature: Course API CRUD and retrieval
     When method post
     Then status 201
     And match response.success == true
+    And match response.message == 'Course created successfully.'
     And match response.data contains
       """
       {
@@ -53,11 +55,14 @@ Feature: Course API CRUD and retrieval
     When method get
     Then status 200
     And match response.success == true
+    And match response.message == 'Courses retrieved successfully.'
     And match response.data[*].courseId contains courseId
 
     Given path 'api/v1/courses', courseId
     When method get
     Then status 200
+    And match response.success == true
+    And match response.message == 'Course retrieved successfully.'
     And match response.data.courseId == courseId
     And match response.data.subjectId == subjectId
     And match response.data.creatorId == creatorId
@@ -66,12 +71,18 @@ Feature: Course API CRUD and retrieval
     Given path 'api/v1/courses/subject', subjectId
     When method get
     Then status 200
+    And match response.success == true
+    And match response.message == 'Courses retrieved successfully.'
     And match response.data[*].courseId contains courseId
+    And match each response.data contains { subjectId: '#(subjectId)' }
 
     Given path 'api/v1/courses/creator', creatorId
     When method get
     Then status 200
+    And match response.success == true
+    And match response.message == 'Courses retrieved successfully.'
     And match response.data[*].courseId contains courseId
+    And match each response.data contains { creatorId: '#(creatorId)' }
 
     * def updatedTitle = 'Updated Karate course ' + java.util.UUID.randomUUID()
     Given path 'api/v1/courses', courseId
@@ -104,6 +115,7 @@ Feature: Course API CRUD and retrieval
     When method put
     Then status 200
     And match response.success == true
+    And match response.message == 'Course updated successfully.'
     And match response.data contains
       """
       {

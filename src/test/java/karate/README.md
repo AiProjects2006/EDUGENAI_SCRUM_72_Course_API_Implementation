@@ -19,10 +19,10 @@ Override `-DbaseUrl` to test another local or test deployment. Do not point this
 - `GET /api/v1/subjects`, `GET /api/v1/subjects/{id}`, `POST /api/v1/subjects`, `PUT /api/v1/subjects/{id}`, `DELETE /api/v1/subjects/{id}`
 - `GET /api/v1/modules`, `GET /api/v1/modules/{id}`, `POST /api/v1/modules`, `PUT /api/v1/modules/{id}`, `DELETE /api/v1/modules/{id}`
 
-The scenarios assert the `success`, `message`, and `data` response envelope, entity fields, successful status codes, validation errors, and not-found behavior. They use random names and only delete records created within their own scenario.
+The 23 scenarios assert the `success`, `message`, and `data` response envelope, entity fields, successful status codes, validation errors, relationship failures, filters with matching and empty results, missing-resource GET/PUT/DELETE behavior, malformed request handling, and course-to-module cascade deletion. CRUD scenarios use unique values, clean up records they create, and do not rely on pre-existing database rows or fixed IDs.
 
 ## Prerequisites and authentication
 
-Start the application with its configured MySQL `course_db` available. The application properties also reference `KEYCLOAK_ISSUER_URI`; supply the issuer configuration needed for application startup. `SecurityConfig` permits all requests, so these tests do not require a token and do not send credentials.
+Start the application with its configured MySQL `course_db` available. The application properties also reference `KEYCLOAK_ISSUER_URI`; supply the issuer configuration needed for application startup. `SecurityConfig` permits all requests, so these tests do not require a token and do not send credentials. Authentication behavior is not tested because the current local security configuration does not require authentication.
 
 The base URL defaults to `http://localhost:8082` (the configured application port). Set `-DbaseUrl=...` to override it.

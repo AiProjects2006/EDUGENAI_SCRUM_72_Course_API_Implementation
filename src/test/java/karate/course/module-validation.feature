@@ -67,3 +67,12 @@ Feature: Module request validation
     And match response.success == false
     And match response.message == 'Course not found with id : ' + courseId
     And match response.data == null
+
+  Scenario: Reject null module title and course ID
+    Given path 'api/v1/modules'
+    And request { title: null, courseId: null }
+    When method post
+    Then status 400
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null

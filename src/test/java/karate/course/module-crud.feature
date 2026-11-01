@@ -37,6 +37,7 @@ Feature: Module API CRUD
     When method post
     Then status 201
     And match response.success == true
+    And match response.message == 'Module created successfully.'
     And match response.data contains
       """
       {
@@ -52,16 +53,25 @@ Feature: Module API CRUD
     When method get
     Then status 200
     And match response.success == true
+    And match response.message == 'Modules retrieved successfully.'
     And match response.data[*].moduleId contains moduleId
 
     Given path 'api/v1/modules', moduleId
     When method get
     Then status 200
+    And match response.success == true
+    And match response.message == 'Module retrieved successfully.'
     And match response.data.moduleId == moduleId
     And match response.data.courseId == courseId
 
     Given path 'api/v1/modules', moduleId
     And request { title: ' ', description: 'Invalid update' }
+    When method put
+    Then status 400
+    And match response == { success: false, message: 'Module title is required', data: null }
+
+    Given path 'api/v1/modules', moduleId
+    And request { title: null, description: 'Invalid update' }
     When method put
     Then status 400
     And match response == { success: false, message: 'Module title is required', data: null }
@@ -77,6 +87,7 @@ Feature: Module API CRUD
     When method put
     Then status 200
     And match response.success == true
+    And match response.message == 'Module updated successfully.'
     And match response.data contains
       """
       {
@@ -103,16 +114,66 @@ Feature: Module API CRUD
     And request { title: 'Updated after deletion' }
     When method put
     Then status 404
-    And match response == { success: false, message: 'Module not found with id : ' + moduleId, data: null }
+    And match response.success == false
+    And match response.message == 'Module not found with id : ' + moduleId
+    And match response.data == null
 
     Given path 'api/v1/modules', moduleId
     When method delete
     Then status 404
-    And match response == { success: false, message: 'Module not found with id : ' + moduleId, data: null }
+    And match response.success == false
+    And match response.message == 'Module not found with id : ' + moduleId
+    And match response.data == null
 
     Given path 'api/v1/courses', courseId
     When method delete
     Then status 200
+
+    Given path 'api/v1/subjects', subjectId
+    When method delete
+    Then status 200
+
+  Scenario: Deleting a course removes its created modules
+    * def subjectName = 'Cascade subject ' + java.util.UUID.randomUUID()
+    Given path 'api/v1/subjects'
+    And request { name: '#(subjectName)' }
+    When method post
+    Then status 201
+    * def subjectId = response.data.subjectId
+
+    * def creatorId = java.lang.System.nanoTime()
+    Given path 'api/v1/courses'
+    And request
+      """
+      {
+        "subjectId": "#(subjectId)",
+        "creatorId": "#(creatorId)",
+        "title": "Course for cascade test",
+        "level": "BEGINNER",
+        "status": "DRAFT"
+      }
+      """
+    When method post
+    Then status 201
+    * def courseId = response.data.courseId
+
+    Given path 'api/v1/modules'
+    And request { title: 'Module for cascade test', courseId: '#(courseId)' }
+    When method post
+    Then status 201
+    * def moduleId = response.data.moduleId
+
+    Given path 'api/v1/courses', courseId
+    When method delete
+    Then status 200
+    And match response == { success: true, message: 'Course deleted successfully.', data: null }
+
+    Given path 'api/v1/modules', moduleId
+    When method get
+    Then status 404
+    And match response.success == false
+    And match response.message == 'Module not found with id : ' + moduleId
+    And match response.data == null
 
     Given path 'api/v1/subjects', subjectId
     When method delete

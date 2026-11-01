@@ -13,6 +13,7 @@ Feature: Subject API CRUD
     When method post
     Then status 201
     And match response.success == true
+    And match response.message == 'Subject created successfully.'
     And match response.data contains
       """
       {
@@ -27,11 +28,14 @@ Feature: Subject API CRUD
     When method get
     Then status 200
     And match response.success == true
+    And match response.message == 'Subjects retrieved successfully.'
     And match response.data[*].subjectId contains subjectId
 
     Given path 'api/v1/subjects', subjectId
     When method get
     Then status 200
+    And match response.success == true
+    And match response.message == 'Subject retrieved successfully.'
     And match response.data.subjectId == subjectId
     And match response.data.name == subjectName
 
@@ -41,6 +45,7 @@ Feature: Subject API CRUD
     When method put
     Then status 200
     And match response.success == true
+    And match response.message == 'Subject updated successfully.'
     And match response.data contains
       """
       {
@@ -66,9 +71,13 @@ Feature: Subject API CRUD
     And request { name: 'Updated after deletion' }
     When method put
     Then status 404
-    And match response == { success: false, message: 'Subject not found with id : ' + subjectId, data: null }
+    And match response.success == false
+    And match response.message == 'Subject not found with id : ' + subjectId
+    And match response.data == null
 
     Given path 'api/v1/subjects', subjectId
     When method delete
     Then status 404
-    And match response == { success: false, message: 'Subject not found with id : ' + subjectId, data: null }
+    And match response.success == false
+    And match response.message == 'Subject not found with id : ' + subjectId
+    And match response.data == null

@@ -135,3 +135,130 @@ Feature: Course request validation
     Given path 'api/v1/subjects', subjectId
     When method delete
     Then status 200
+
+  Scenario: Reject null values for required course fields
+    Given path 'api/v1/courses'
+    And request { subjectId: null, creatorId: null, title: null, level: null, status: null }
+    When method post
+    Then status 400
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/courses', java.lang.System.nanoTime()
+    And request { title: null, level: 'BEGINNER', status: 'DRAFT' }
+    When method put
+    Then status 400
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/courses', java.lang.System.nanoTime()
+    And request { title: 'Valid title', level: null, status: 'DRAFT' }
+    When method put
+    Then status 400
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/courses', java.lang.System.nanoTime()
+    And request { title: 'Valid title', level: 'BEGINNER', status: null }
+    When method put
+    Then status 400
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+  Scenario: Invalid enum values are rejected through the global error handler
+    * def subjectId = java.lang.System.nanoTime()
+    * def creatorId = java.lang.System.nanoTime()
+    Given path 'api/v1/courses'
+    And request
+      """
+      {
+        "subjectId": "#(subjectId)",
+        "creatorId": "#(creatorId)",
+        "title": "Invalid enum course",
+        "level": "NOT_A_LEVEL",
+        "status": "DRAFT"
+      }
+      """
+    When method post
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/courses'
+    And request
+      """
+      {
+        "subjectId": "#(subjectId)",
+        "creatorId": "#(creatorId)",
+        "title": "Invalid enum course",
+        "level": "BEGINNER",
+        "status": "NOT_A_STATUS"
+      }
+      """
+    When method post
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+  Scenario: Invalid numeric path IDs use the global error response
+    Given path 'api/v1/courses', 'not-a-number'
+    When method get
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/courses'
+    And request
+      """
+      {
+        "subjectId": "not-a-number",
+        "creatorId": "#(java.lang.System.nanoTime())",
+        "title": "Invalid numeric subject ID",
+        "level": "BEGINNER",
+        "status": "DRAFT"
+      }
+      """
+    When method post
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/modules'
+    And request { title: 'Invalid numeric course ID', courseId: 'not-a-number' }
+    When method post
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/subjects', 'not-a-number'
+    When method get
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+    Given path 'api/v1/modules', 'not-a-number'
+    When method get
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null
+
+  Scenario: Malformed JSON uses the global error response
+    * def malformedJson = '{ "title": '
+    Given path 'api/v1/courses'
+    And request malformedJson
+    When method post
+    Then status 500
+    And match response.success == false
+    And match response.message == '#string'
+    And match response.data == null

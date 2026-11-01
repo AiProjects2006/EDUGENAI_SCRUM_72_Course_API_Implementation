@@ -37,3 +37,27 @@ Feature: Subject request validation
     Given path 'api/v1/subjects', subjectId
     When method delete
     Then status 200
+
+  Scenario: Reject null subject names for create and update
+    Given path 'api/v1/subjects'
+    And request { name: null }
+    When method post
+    Then status 400
+    And match response == { success: false, message: 'Subject name is required', data: null }
+
+    * def subjectName = 'Null subject update ' + java.util.UUID.randomUUID()
+    Given path 'api/v1/subjects'
+    And request { name: '#(subjectName)' }
+    When method post
+    Then status 201
+    * def subjectId = response.data.subjectId
+
+    Given path 'api/v1/subjects', subjectId
+    And request { name: null }
+    When method put
+    Then status 400
+    And match response == { success: false, message: 'Subject name is required', data: null }
+
+    Given path 'api/v1/subjects', subjectId
+    When method delete
+    Then status 200
